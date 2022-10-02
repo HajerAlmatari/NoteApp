@@ -86,7 +86,7 @@ public class CreateNote extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 
-                            Toast.makeText(getApplicationContext(), "Failed to Create Note",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Failed to create note",Toast.LENGTH_LONG).show();
 
                         }
                     });
