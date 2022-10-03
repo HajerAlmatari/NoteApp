@@ -8,6 +8,17 @@
     tools:context=".MainActivity">
 
 
+    <ProgressBar
+        android:id="@+id/progressBarOfMainActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:layout_marginTop="30dp"
+        />
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,26 +92,24 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <RelativeLayout
+        android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/button_design"
         android:layout_below="@+id/password"
-        android:id="@+id/login"
-        >
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/button_design">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textSize="16sp"
-            android:text="Log In"
-            android:textStyle="bold"
-            android:textColor="@color/white"
             android:layout_centerInParent="true"
-            />
+            android:layout_marginStart="8dp"
+            android:text="Log In"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 

@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ public class SignUp extends AppCompatActivity {
     private EditText mSignupEmail,mSignupPassword;
     private RelativeLayout mSignup;
     private TextView mGoToLogin;
+    private ProgressBar mProgressBarOfSignup;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -36,6 +38,7 @@ public class SignUp extends AppCompatActivity {
         mSignupPassword = findViewById(R.id.signupPassword);
         mSignup = findViewById(R.id.signup);
         mGoToLogin = findViewById(R.id.goToLogin);
+        mProgressBarOfSignup = findViewById(R.id.progressBarOfSignup);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -65,6 +68,8 @@ public class SignUp extends AppCompatActivity {
 
                 else {
 
+                    mSignup.setVisibility(View.INVISIBLE);
+                    mProgressBarOfSignup.setVisibility(View.VISIBLE);
                     firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -74,6 +79,8 @@ public class SignUp extends AppCompatActivity {
                                 sendEmailVerification();
                             }
                             else {
+                                mProgressBarOfSignup.setVisibility(View.INVISIBLE);
+                                mSignup.setVisibility(View.VISIBLE);
                                 Toast.makeText(getApplicationContext(),"Failed to Register",Toast.LENGTH_LONG).show();
 
                             }

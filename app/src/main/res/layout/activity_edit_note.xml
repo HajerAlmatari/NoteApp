@@ -4,37 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateNote">
-
-
+    tools:context=".EditNoteActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBarOfCreatNote"
+        android:id="@+id/toolBarOfEditNote"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white">
 
 
-    <EditText
-        android:id="@+id/createTitleOfNote"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="12dp"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:hint="Enter Your Note Title Here"/>
+        <EditText
+            android:id="@+id/editTitleOfNote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="12dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
     </androidx.appcompat.widget.Toolbar>
 
     <EditText
-        android:id="@+id/createContentOfNote"
+        android:id="@+id/editContentOfNote"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolBarOfCreatNote"
+        android:layout_below="@+id/toolBarOfEditNote"
         android:background="#faf7f7"
         android:gravity="top|left"
-        android:hint="Enter Your Note Here"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:padding="15dp"
@@ -42,7 +38,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/saveNoteFab"
+        android:id="@+id/saveEditedNoteFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -50,19 +46,20 @@
         android:layout_marginRight="30dp"
         android:layout_marginBottom="30dp"
         android:background="#a1f4fb"
-        android:src="@drawable/ic_baseline_save_24"
+        android:src="@drawable/ic_baseline_cloud_upload_24"
         app:maxImageSize="35dp" />
 
 
-
     <ProgressBar
-        android:id="@+id/progressBarOfCreateNote"
+        android:id="@+id/progressBarOfUpdateNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="invisible"
         android:layout_marginTop="10dp"
         />
+
+
 
 
 </RelativeLayout>

@@ -8,6 +8,19 @@
     android:background="#f9f9f9">
 
 
+
+    <ProgressBar
+        android:id="@+id/progressBarOfSignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:layout_marginTop="30dp"
+        />
+
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
