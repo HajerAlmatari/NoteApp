@@ -3,7 +3,10 @@ package com.example.notesapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -28,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
 
+    boolean isConnected = false;
+    ConnectivityManager connectivityManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,15 +52,14 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
 
-
-        if(firebaseUser != null){
+        if (firebaseUser != null) {
 
             finish();
 
             Intent intent = new Intent(MainActivity.this, NotesActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
-            overridePendingTransition(0,0);
+            overridePendingTransition(0, 0);
 
         }
 
@@ -61,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mGoToSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,SignUp.class));
+                startActivity(new Intent(MainActivity.this, SignUp.class));
             }
         });
 
@@ -69,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mGoToForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,ForgotPassword.class));
+                startActivity(new Intent(MainActivity.this, ForgotPassword.class));
             }
         });
 
@@ -80,35 +86,39 @@ public class MainActivity extends AppCompatActivity {
                 String email = mLoginEmail.getText().toString().trim();
                 String password = mLoginPassword.getText().toString().trim();
 
-                if (email.isEmpty() || password.isEmpty()){
+                if (email.isEmpty() || password.isEmpty()) {
 
-                    Toast.makeText(getApplicationContext(),"Please enter all required information",Toast.LENGTH_LONG).show();
-                }
-
-                else {
-
-//                    Toast.makeText(getApplicationContext(),"Login successfully ",Toast.LENGTH_LONG).show();
-
-                    mLogin.setVisibility(View.INVISIBLE);
-                    mProgressBarOfMainActivity.setVisibility(View.VISIBLE);
-
-                    firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                    Toast.makeText(getApplicationContext(), "Please enter all required information", Toast.LENGTH_LONG).show();
+                } else {
 
 
-                            if(task.isSuccessful()){
-                                checkEmailVerification();
+                    if (isConnected) {
+                        //                    Toast.makeText(getApplicationContext(),"Login successfully ",Toast.LENGTH_LONG).show();
 
-                            }else {
-                                Toast.makeText(getApplicationContext(),"Account Not Exists",Toast.LENGTH_LONG).show();
-                                mProgressBarOfMainActivity.setVisibility(View.INVISIBLE);
-                                mLogin.setVisibility(View.VISIBLE);
+                        mLogin.setVisibility(View.INVISIBLE);
+                        mProgressBarOfMainActivity.setVisibility(View.VISIBLE);
+
+                        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+
+                                if (task.isSuccessful()) {
+                                    checkEmailVerification();
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Account Not Exists", Toast.LENGTH_LONG).show();
+                                    mProgressBarOfMainActivity.setVisibility(View.INVISIBLE);
+                                    mLogin.setVisibility(View.VISIBLE);
+
+                                }
 
                             }
+                        });
+                    } else {
+                        Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
 
-                        }
-                    });
+                    }
 
                 }
 
@@ -119,24 +129,68 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void checkEmailVerification(){
+    private void checkEmailVerification() {
 
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-        if(firebaseUser.isEmailVerified() == true){
-            Toast.makeText(getApplicationContext(),"Successfully Logged In",Toast.LENGTH_LONG).show();
+        if (firebaseUser.isEmailVerified() == true) {
+            Toast.makeText(getApplicationContext(), "Successfully Logged In", Toast.LENGTH_LONG).show();
             getWindow().setWindowAnimations(0);
             finish();
             startActivity(new Intent(MainActivity.this, NotesActivity.class));
-        }
-        else
-        {
+        } else {
             mProgressBarOfMainActivity.setVisibility(View.INVISIBLE);
             mLogin.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(),"verify your email to login",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "verify your email to login", Toast.LENGTH_LONG).show();
             firebaseAuth.signOut();
         }
 
+    }
+
+    private void registerNetworkCallback() {
+
+        try {
+
+            connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(@NonNull Network network) {
+                    super.onAvailable(network);
+                    isConnected = true;
+                }
+
+                @Override
+                public void onLost(@NonNull Network network) {
+                    super.onLost(network);
+                    isConnected = false;
+                }
+            });
+
+        } catch (Exception e) {
+            isConnected = false;
+        }
+
+    }
+
+
+    private void unregisterNetworkCallback() {
+
+        connectivityManager.unregisterNetworkCallback(new ConnectivityManager.NetworkCallback());
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        registerNetworkCallback();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterNetworkCallback();
     }
 
 
